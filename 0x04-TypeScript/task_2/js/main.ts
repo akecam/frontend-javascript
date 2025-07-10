@@ -1,53 +1,69 @@
-// Teacher Interface
-interface Teacher {
-    readonly firstName: string | null;
-    readonly lastName: string | null;
-    fullTimeEmployee: boolean;
-    yearsOfExperience?: number;
-    location: string;
-    [key: string]: any;
+interface DirectorInterface {
+    workFromHome(): string;
+    getCoffeeBreak(): string;
+    workDirectorTasks(): string;
 }
 
-// Director Interface
-interface Directors extends Teacher {
-    numberOfReports: number;
+interface TeacherInterface {
+    workFromHome(): string;
+    getCoffeeBreak(): string;
+    workTeacherTasks(): string;
 }
 
-type printTeacherFunction<T> = (first: T, second: T) => T;
-
-const printTeacher: printTeacherFunction<string> = (firstName: string, lastName: string) => {
-    return `${firstName[0]}. ${lastName}`;
-}
-
-
-// Student Class 
-
-interface StudentClassInterface {
-    firstName: string;
-    lastName: string;
-    workOnHomework(): string;
-    displayName(): string;
-}
-
-interface StudentClassConstructor {
-    new (firstName: string, lastName: string): StudentClassInterface;
-}
-
-class StudentClass implements StudentClassInterface {
-    public firstName: string;
-    public lastName: string;
+class Director implements DirectorInterface {
     
-    constructor(firstName: string, lastName: string) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    workFromHome(): string {
+        return "Working from home";
     }
 
-    workOnHomework(): string {
-        return "Currently working";
+    getCoffeeBreak(): string {
+        return "Getting a coffee break";
     }
 
-    displayName(): typeof this.firstName {
-        return `${this.firstName}`;
+    workDirectorTasks(): string {
+        return "Getting to director tasks";
     }
-
 }
+
+
+class Teacher implements TeacherInterface {
+    
+    workFromHome(): string {
+        return "Cannot work from home";
+    }
+
+    getCoffeeBreak(): string {
+        return "Cannot have a break";
+    }
+
+    workTeacherTasks(): string {
+        return "Getting to work";
+    }
+}
+
+const createEmployee = (salary: number | string): Director | Teacher => {
+    if (typeof salary == "string") {
+        salary = parseInt(salary.slice(1))
+    }
+    return salary < 500 ? new Teacher() : new Director();
+}
+
+const isDirector = (employee: Director | Teacher): employee is Director => {
+    return employee instanceof Director;
+}
+
+
+const executeWork = (employee: Director | Teacher): string => {
+    if (isDirector(employee)) {
+        return employee.workDirectorTasks();
+    } else {
+        return employee.workTeacherTasks();
+    }
+}
+
+type Subjects = "Math" | "History";
+
+const teachClass = (todayClass: Subjects): "Teaching Math" | "Teaching History" => {
+    return todayClass === "Math" ? "Teaching Math" : "Teaching History";
+}
+
