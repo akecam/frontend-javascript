@@ -12,10 +12,10 @@ namespace Subjects {
         }
 
         getAvailableTeacher(): string {
-            if (this.teacher.experienceTeachingReact === 0) {
+            if (typeof this.teacher.experienceTeachingReact == "undefined") {
                 return "No available teacher";
             }
-            return `Available Teacher ${this.teacher.firstName}`;
+            return `Available Teacher: ${this.teacher.firstName}`;
         }
     }
 }
